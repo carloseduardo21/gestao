@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "sales" ALTER COLUMN "dueDate" SET DATA TYPE TEXT;

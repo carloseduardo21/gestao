@@ -1,0 +1,32 @@
+{
+  "name": "api-gestao",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/app.js",
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "scripts": {
+    "dev": "tsx watch src/app.ts",
+    "build": "tsup src",
+    "start": "node dist/app.js"
+  },
+  "keywords": [],
+  "author": "Carlos Silva",
+  "license": "ISC",
+  "devDependencies": {
+    "@rocketseat/eslint-config": "^1.2.0",
+    "@types/node": "^20.3.1",
+    "prisma": "^4.14.0",
+    "tsup": "^6.7.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.2.1",
+    "@prisma/client": "^4.14.0",
+    "fastify": "^4.17.0",
+    "fastify-plugin": "^4.5.0",
+    "zod": "^3.21.4"
+  }
+}

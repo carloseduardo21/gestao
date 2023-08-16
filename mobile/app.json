@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "gestao",
+    "slug": "gestao",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "2fc5cf43-4677-48ac-8e8c-173323a8a3e9"
+      }
+    }
+  }
+}

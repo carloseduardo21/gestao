@@ -1,0 +1,177 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  password String
+  role     Role     @default(USER)
+  Seller   Seller[]
+
+  @@map("users")
+}
+
+model Client {
+  id         String    @id @default(uuid())
+  name       String
+  email      String?   @unique
+  cpf        String?   @unique
+  cell       String?   @unique
+  birth_date DateTime?
+  active     Boolean   @default(true)
+
+  DeliveryAddress DeliveryAddress[]
+  Sale            Sale[]
+
+  @@map("clients")
+}
+
+model DeliveryAddress {
+  id         String  @id @default(uuid())
+  clientId   String
+  zip        String
+  address    String
+  number     String?
+  complement String?
+  district   String
+  city       String
+  state      String
+
+  client Client @relation(fields: [clientId], references: [id])
+
+  @@map("delivery_address")
+}
+
+model Supplier {
+  id   String  @id @default(uuid())
+  name String
+  cnpj String?
+  cell String? @unique
+  city String
+
+  @@map("suppliers")
+}
+
+model Product {
+  id          String  @id @default(uuid())
+  codeBar     String? @unique
+  refer       String? @unique
+  description String
+  brand       String
+  costPrice   Decimal
+  salePrice   Decimal
+  unit        Unit    @default(UN)
+
+  Stock         Stock[]
+  ProductsSales ProductsSales[]
+
+  @@map("products")
+}
+
+model Stock {
+  id        String @id @default(uuid())
+  productId String @unique
+  min       Int
+  max       Int
+  current   Int
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("stocks")
+}
+
+model Seller {
+  id     String @id @default(uuid())
+  name   String
+  cell   String
+  userId String @unique
+
+  user User   @relation(fields: [userId], references: [id])
+  Sale Sale[]
+
+  @@map("sellers")
+}
+
+model Sale {
+  id             String        @id @default(uuid())
+  paymentMethod  PaymentMethod @default(money)
+  requestNumber  Int           @unique @default(autoincrement())
+  clientId       String
+  sellerId       String
+  totalSalePrice Decimal
+  discount       Decimal
+
+  productsSales ProductsSales[]
+  client        Client          @relation(fields: [clientId], references: [id])
+  seller        Seller          @relation(fields: [sellerId], references: [id])
+
+  @@map("sales")
+}
+
+model ProductsSales {
+  id           String  @id @default(uuid())
+  saleId       String
+  productId    String
+  quantity     Int
+  productPrice Decimal
+
+  sale    Sale    @relation(fields: [saleId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("products_sales")
+}
+
+enum Role {
+  USER
+  STOCKIST
+  PURCHASING
+  SELLER
+  ADMIN
+}
+
+enum Unit {
+  BALDE
+  BANDEJA
+  BARRA
+  BLOCO
+  BOBINA
+  CART
+  CX
+  CX2
+  CX3
+  CX5
+  CX10
+  CX15
+  CX20
+  CX25
+  CX50
+  CX100
+  FARDO
+  GRAMAS
+  KG
+  KIT
+  LATA
+  LITRO
+  M
+  PACOTE
+  PC
+  POTE
+  UN
+}
+
+enum PaymentMethod {
+  pix
+  money
+  debt
+  credit
+}
